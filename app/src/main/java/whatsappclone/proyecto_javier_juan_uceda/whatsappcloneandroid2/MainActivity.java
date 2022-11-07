@@ -1,5 +1,6 @@
 package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingComponent;
@@ -12,7 +13,10 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.Delayed;
@@ -31,14 +35,39 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_main);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
+        setUpWithViewPager(binding.viewPager);
+        setSupportActionBar(binding.toolbar);
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+       return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.menu_search:
+                Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_more:
+                Toast.makeText(this, "More", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setUpWithViewPager(ViewPager viewPager){
         MyAdapter myAdapter = new MyAdapter(getSupportFragmentManager());
         myAdapter.addFragment(new CallsFragment(), "Calls");
         myAdapter.addFragment(new StatusFragment(), "Status");
         myAdapter.addFragment(new ChatsFragment(), "Chats");
+
+        viewPager.setAdapter(myAdapter);
     }
 
     public static class MyAdapter extends FragmentPagerAdapter {
