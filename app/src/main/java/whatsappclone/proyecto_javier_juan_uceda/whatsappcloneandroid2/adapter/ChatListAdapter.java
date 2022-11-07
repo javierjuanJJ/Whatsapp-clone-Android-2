@@ -20,7 +20,7 @@ import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.Chat
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.Holder> {
 
-   private ArrayList<ChatList> chatLists = new ArrayList<>(0);
+   private List<ChatList> chatLists = new ArrayList<>(0);
    private Context context;
 
    public ChatListAdapter(List<ChatList> chatLists, Context context) {
