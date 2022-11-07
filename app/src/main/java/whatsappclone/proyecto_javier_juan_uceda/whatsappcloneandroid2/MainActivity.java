@@ -37,7 +37,22 @@ public class MainActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setUpWithViewPager(binding.viewPager);
         setSupportActionBar(binding.toolbar);
+        binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                changeFabIcon(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
@@ -100,5 +115,22 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return fragmentTitles.get(position);
         }
+    }
+
+    private static final int[] DRAWABLES = new int[]{R.drawable.call, R.drawable.status, R.drawable.chat};
+
+    private void changeFabIcon(final int icon){
+        binding.fabAction.hide();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                binding.fabAction.setImageDrawable(getDrawable(DRAWABLES[icon]));
+
+                binding.fabAction.show();
+            }
+        },400);
+
+
     }
 }
