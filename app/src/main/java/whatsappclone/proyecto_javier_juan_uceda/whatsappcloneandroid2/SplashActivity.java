@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.stanup.WelcomeScreenActivity;
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override
@@ -16,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                startActivity(new Intent(SplashActivity.this, WelcomeScreenActivity.class));
                 finish();
             }
         }, 3000);
