@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -66,7 +67,7 @@ public class PhoneLoginActivity extends AppCompatActivity {
                     progressDialog.setMessage("Please wait");
                     progressDialog.show();
 
-                    String phone = "+" +  binding.etCode.getText().toString() +binding.etPhoneNumber.getText().toString();
+                    String phone = "+" +  binding.etCodeCountry.getText().toString() +binding.etPhoneNumber.getText().toString();
                     startPhoneNumberVerification(phone);
 
                 } else {
@@ -89,7 +90,7 @@ public class PhoneLoginActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
-
+                Log.e("PhoneLoginActivity",e.getMessage());
             }
 
             @Override
@@ -135,7 +136,7 @@ public class PhoneLoginActivity extends AppCompatActivity {
                 }
                 else {
                     if (task.getException() instanceof FirebaseAuthInvalidCredentialsException){
-
+                        Log.e("PhoneLoginActivity",task.getException().getMessage());
                     }
 
                 }
