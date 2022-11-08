@@ -3,64 +3,53 @@ package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CallsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.adapter.CallListAdapter;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.adapter.ChatListAdapter;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.CallList;
+
 public class CallsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private RecyclerView recyclerView;
 
     public CallsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CallsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CallsFragment newInstance(String param1, String param2) {
+    public static CallsFragment newInstance() {
         CallsFragment fragment = new CallsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_calls, container, false);
+        View inflate = inflater.inflate(R.layout.fragment_calls, container, false);
+
+        recyclerView = inflate.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
+        getChatList();
+        return inflate;
+    }
+
+    private void getChatList() {
+        List<CallList> list = new ArrayList<>();
+        //list.add(new ChatList("","","","",""))
+        recyclerView.setAdapter(new CallListAdapter(list,getContext()));
     }
 }
