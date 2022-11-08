@@ -1,4 +1,4 @@
-package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2;
+package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +24,7 @@ import java.util.concurrent.Delayed;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu.CallsFragment;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu.ChatsFragment;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu.StatusFragment;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {

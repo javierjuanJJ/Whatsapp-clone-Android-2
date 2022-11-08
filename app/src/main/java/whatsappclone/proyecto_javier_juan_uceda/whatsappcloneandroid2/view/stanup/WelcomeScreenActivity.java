@@ -1,4 +1,4 @@
-package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.stanup;
+package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.stanup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.MainActivity;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.MainActivity;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 
 public class WelcomeScreenActivity extends AppCompatActivity {
