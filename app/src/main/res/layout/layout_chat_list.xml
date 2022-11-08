@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#FDDDD0"
     android:orientation="horizontal"
     android:padding="10dp">
 
@@ -9,7 +10,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:background="@drawable/placeholder" />
+        android:background="@color/white" />
 
     <LinearLayout
         android:layout_width="6dp"
