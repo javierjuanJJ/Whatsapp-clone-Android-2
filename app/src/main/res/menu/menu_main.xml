@@ -6,9 +6,22 @@
         android:icon="@android:drawable/ic_menu_search"
         android:title="Search"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/menu_more"
-        android:icon="@android:drawable/ic_menu_more"
-        android:title="More"
-        app:showAsAction="always" />
+    <group
+        android:id="@+id/actionMenu">
+        <item
+            android:id="@+id/newGroup"
+            android:title="New group"/>
+        <item
+            android:id="@+id/newBroadcast"
+            android:title="New broadcast"/>
+        <item
+            android:id="@+id/whatsappWeb"
+            android:title="Whatsapp web"/>
+        <item
+            android:id="@+id/standMessage"
+            android:title="Stand message"/>
+        <item
+            android:id="@+id/settings"
+            android:title="Settings"/>
+    </group>
 </menu>

@@ -69,8 +69,20 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_search:
                 Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.menu_more:
-                Toast.makeText(this, "More", Toast.LENGTH_SHORT).show();
+            case R.id.newGroup:
+                Toast.makeText(this, "New group", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.newBroadcast:
+                Toast.makeText(this, "New broadcast", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.whatsappWeb:
+                Toast.makeText(this, "Whatsapp web", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.standMessage:
+                Toast.makeText(this, "Stand message", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.settings:
+                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
                 break;
         }
 
