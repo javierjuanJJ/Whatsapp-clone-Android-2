@@ -23,12 +23,15 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.security.ProtectionDomain;
 import java.util.concurrent.TimeUnit;
 
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.databinding.ActivityPhoneLoginBinding;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.Users.Users;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.MainActivity;
 
 public class PhoneLoginActivity extends AppCompatActivity {
@@ -44,6 +47,10 @@ public class PhoneLoginActivity extends AppCompatActivity {
     private boolean mVerificationIdInProgress;
     private ProgressDialog progressDialog;
 
+    private FirebaseAuth firebaseAuth;
+    private  FirebaseUser firebaseUser;
+    private FirebaseFirestore firestore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +64,7 @@ public class PhoneLoginActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_phone_login);
 
         mAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
 
         progressDialog = new ProgressDialog(this);
 
@@ -132,7 +140,20 @@ public class PhoneLoginActivity extends AppCompatActivity {
                     progressDialog.dismiss();
 
                     FirebaseUser user = task.getResult().getUser();
-                    startActivity(new Intent(PhoneLoginActivity.this, SetUserInfoActivity.class));
+
+                    if (user != null) {
+                        String uid = user.getUid();
+                        Users users = new Users("",user.getPhoneNumber(),"","","","","","","","");
+                        firestore.collection("Users").document("UserInfo").collection(uid).add(users).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                startActivity(new Intent(PhoneLoginActivity.this, SetUserInfoActivity.class));
+                            }
+                        });
+                    }
+                    else {
+                        Toast.makeText(PhoneLoginActivity.this, "Something error", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else {
                     if (task.getException() instanceof FirebaseAuthInvalidCredentialsException){
