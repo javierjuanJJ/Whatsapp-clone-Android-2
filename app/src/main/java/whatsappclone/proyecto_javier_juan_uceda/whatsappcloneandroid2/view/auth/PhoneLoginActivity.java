@@ -66,6 +66,12 @@ public class PhoneLoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null){
+
+            startActivity(new Intent(this, SetUserInfoActivity.class));
+        }
+
         progressDialog = new ProgressDialog(this);
 
         binding.btnCountry.setOnClickListener(new View.OnClickListener() {
@@ -140,20 +146,20 @@ public class PhoneLoginActivity extends AppCompatActivity {
                     progressDialog.dismiss();
 
                     FirebaseUser user = task.getResult().getUser();
-
-                    if (user != null) {
-                        String uid = user.getUid();
-                        Users users = new Users("",user.getPhoneNumber(),"","","","","","","","");
-                        firestore.collection("Users").document("UserInfo").collection(uid).add(users).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentReference> task) {
-                                startActivity(new Intent(PhoneLoginActivity.this, SetUserInfoActivity.class));
-                            }
-                        });
-                    }
-                    else {
-                        Toast.makeText(PhoneLoginActivity.this, "Something error", Toast.LENGTH_SHORT).show();
-                    }
+                    startActivity(new Intent(PhoneLoginActivity.this, SetUserInfoActivity.class));
+//                    if (user != null) {
+//                        String uid = user.getUid();
+//                        Users users = new Users("",user.getPhoneNumber(),"","","","","","","","");
+//                        firestore.collection("Users").document("UserInfo").collection(uid).add(users).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DocumentReference> task) {
+//                                startActivity(new Intent(PhoneLoginActivity.this, SetUserInfoActivity.class));
+//                            }
+//                        });
+//                    }
+//                    else {
+//                        Toast.makeText(PhoneLoginActivity.this, "Something error", Toast.LENGTH_SHORT).show();
+//                    }
                 }
                 else {
                     if (task.getException() instanceof FirebaseAuthInvalidCredentialsException){
