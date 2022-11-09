@@ -26,6 +26,7 @@ import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu.Chats
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu.StatusFragment;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.databinding.ActivityMainBinding;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setUpWithViewPager(binding.viewPager);
         setSupportActionBar(binding.toolbar);
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.settings:
                 Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 break;
         }
 
