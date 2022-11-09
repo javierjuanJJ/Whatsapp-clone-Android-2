@@ -132,7 +132,7 @@ public class PhoneLoginActivity extends AppCompatActivity {
                     progressDialog.dismiss();
 
                     FirebaseUser user = task.getResult().getUser();
-                    startActivity(new Intent(PhoneLoginActivity.this, MainActivity.class));
+                    startActivity(new Intent(PhoneLoginActivity.this, SetUserInfoActivity.class));
                 }
                 else {
                     if (task.getException() instanceof FirebaseAuthInvalidCredentialsException){
