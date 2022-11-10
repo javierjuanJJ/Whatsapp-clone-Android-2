@@ -49,7 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        bottomSheetDialog = new BottomSheetDialog(this);
+
 
         if (firebaseUser != null){
             getInfo();
@@ -69,6 +69,11 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showBottomSheetDialog() {
+
+        if (bottomSheetDialog == null) {
+            bottomSheetDialog = new BottomSheetDialog(this);
+        }
+
         View view = getLayoutInflater().inflate(R.layout.bottom_sheet_pick, null);
 
         bottomSheetDialog.setContentView(view);
