@@ -41,6 +41,8 @@ public class ProfileActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
         if (firebaseUser != null){
             getInfo();
         }
@@ -56,8 +58,11 @@ public class ProfileActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        String userName = Objects.requireNonNull(documentSnapshot.get("userName")).toString();
-                        binding.tvName.setText(userName);
+                        String userName = documentSnapshot.getString("userName");
+                        String userPhone = documentSnapshot.getString("userPhone");
+
+                        binding.tvUsername.setText(userName);
+                        binding.tvInfoPhone.setText(userPhone);
                     }
                 })
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
