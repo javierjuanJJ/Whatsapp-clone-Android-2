@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:id="@+id/layoutProfile"
+
         tools:context=".Profile.ProfileActivity">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -81,6 +81,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/layoutProfile"
                         android:orientation="horizontal">
 
                         <TextView

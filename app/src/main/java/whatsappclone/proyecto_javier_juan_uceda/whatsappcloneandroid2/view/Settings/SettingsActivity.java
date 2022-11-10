@@ -66,11 +66,16 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Log.i("SettingsActivity","On success successly");
-                        String userName = Objects.requireNonNull(documentSnapshot.get("userName")).toString();
-                        String imageProfile = documentSnapshot.getString("imageProfile");
 
-                        binding.username.setText(userName);
-                        Glide.with(getApplicationContext()).load(imageProfile).into(binding.ivProfile);
+                        if (documentSnapshot.get("userName") != null) {
+                            String userName = documentSnapshot.get("userName").toString();
+                            binding.username.setText(userName);
+                            if (documentSnapshot.get("imageProfile") != null) {
+                                String imageProfile = documentSnapshot.getString("imageProfile");
+                                Glide.with(getApplicationContext()).load(imageProfile).into(binding.ivProfile);
+                            }
+                        }
+
                     }
                 })
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
