@@ -1,14 +1,10 @@
-package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Settings;
+package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Profile;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -21,42 +17,38 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
-import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Profile.ProfileActivity;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.databinding.ActivityProfileBinding;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.databinding.ActivitySettingsBinding;
 
-public class SettingsActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity {
 
-    private ActivitySettingsBinding binding;
+    private ActivityProfileBinding binding;
     private FirebaseUser firebaseUser;
     private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_profile);
+
         setUI();
     }
 
     private void setUI() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_settings);
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_profile);
 
         firestore = FirebaseFirestore.getInstance();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (binding != null) {
+        if (firebaseUser != null){
             getInfo();
         }
-        initClickAction();
+
     }
 
     private void initClickAction() {
-        binding.ivProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-            }
-        });
+
     }
 
     private void getInfo() {
@@ -64,22 +56,21 @@ public class SettingsActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Log.i("SettingsActivity","On success successly");
                         String userName = Objects.requireNonNull(documentSnapshot.get("userName")).toString();
-                        binding.username.setText(userName);
+                        binding.tvName.setText(userName);
                     }
                 })
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                Log.i("SettingsActivity","On Complete successly");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("SettingsActivity",e.getMessage());
-                Toast.makeText(SettingsActivity.this, "Log in failed", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
     }
 }
