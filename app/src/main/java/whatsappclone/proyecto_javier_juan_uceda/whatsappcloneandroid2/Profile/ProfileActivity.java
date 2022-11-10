@@ -14,9 +14,11 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -44,7 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ActivityProfileBinding binding;
     private FirebaseUser firebaseUser;
     private FirebaseFirestore firestore;
-    private BottomSheetDialog bottomSheetDialog;
+    private BottomSheetDialog bottomSheetDialog, bottomSheetEditNameDialog;
     private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,13 @@ public class ProfileActivity extends AppCompatActivity {
                 showBottomSheetDialog();
             }
         });
+
+        binding.layoutProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showBottomSheetDialog();
+            }
+        });
     }
 
     private void showBottomSheetDialog() {
@@ -88,7 +97,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         View view = getLayoutInflater().inflate(R.layout.bottom_sheet_pick, null);
-
         view.findViewById(R.id.layoutGallery).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,7 +112,6 @@ public class ProfileActivity extends AppCompatActivity {
                 bottomSheetDialog.dismiss();
             }
         });
-
         bottomSheetDialog.setContentView(view);
 
         bottomSheetDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -118,6 +125,68 @@ public class ProfileActivity extends AppCompatActivity {
 
         bottomSheetDialog.show();
     }
+    private void showBottomSheetEditNameDialog() {
+
+        if (bottomSheetEditNameDialog == null) {
+            bottomSheetEditNameDialog = new BottomSheetDialog(this);
+        }
+        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_edit_name, null);
+
+        view.findViewById(R.id.btnSave).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                bottomSheetDialog.dismiss();
+            }
+        });
+        EditText etUserName = view.findViewById(R.id.etUserName);
+        view.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (TextUtils.isEmpty(etUserName.getText().toString())){
+                    Toast.makeText(getApplicationContext(), "Name can't be empty", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    updateProfile(etUserName.getText().toString());
+                    bottomSheetDialog.dismiss();
+                }
+
+
+
+            }
+        });
+
+        bottomSheetEditNameDialog.setContentView(view);
+
+        bottomSheetEditNameDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        bottomSheetEditNameDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                bottomSheetEditNameDialog = null;
+            }
+        });
+
+
+        bottomSheetDialog.show();
+    }
+
+    private void updateProfile(String newName) {
+        firestore.collection("Users").document(firebaseUser.getUid()).update("userName",newName).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(getApplicationContext(), "Update succesful", Toast.LENGTH_SHORT).show();
+
+                getInfo();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+
     private static final int IMAGE_REQUEST_GALLERY = 1;
 
     private void openGallery() {
