@@ -5,16 +5,21 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,7 +29,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
@@ -36,7 +45,7 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseFirestore firestore;
     private BottomSheetDialog bottomSheetDialog;
-
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-
+        progressDialog = new ProgressDialog(this);
 
         if (firebaseUser != null){
             getInfo();
@@ -125,6 +134,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMAGE_REQUEST_GALLERY && resultCode == RESULT_OK &&  data != null && data.getData() != null){
             uri = data.getData();
+            uploadToFirebase();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 binding.imageProfile.setImageBitmap(bitmap);
@@ -134,6 +144,48 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    private void uploadToFirebase() {
+        if (uri!=null){
+            progressDialog.setMessage("Uploading...");
+            progressDialog.show();
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("imageProfile/" + System.currentTimeMillis() + " " + getFileExtension(uri));
+
+            storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!result.isSuccessful());
+
+                    Uri downloadUri = result.getResult();
+                    String downloadUrl = String.valueOf(downloadUri);
+
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("imageProfile",downloadUrl);
+                    firestore.collection("Users").document(firebaseUser.getUid()).update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Upload succesfully", Toast.LENGTH_SHORT).show();
+
+                            getInfo();
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
+                }
+            });
+        }
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
     private void getInfo() {
         firestore.collection("Users").document(firebaseUser.getUid()).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -141,9 +193,11 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         String userName = documentSnapshot.getString("userName");
                         String userPhone = documentSnapshot.getString("userPhone");
+                        String imageProfile = documentSnapshot.getString("imageProfile");
 
                         binding.tvUsername.setText(userName);
                         binding.tvInfoPhone.setText(userPhone);
+                        Glide.with(getApplicationContext()).load(imageProfile).into(binding.imageProfile);
                     }
                 })
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

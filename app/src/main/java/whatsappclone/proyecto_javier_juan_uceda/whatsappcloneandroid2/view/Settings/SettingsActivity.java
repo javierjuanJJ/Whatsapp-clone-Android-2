@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -66,7 +67,10 @@ public class SettingsActivity extends AppCompatActivity {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Log.i("SettingsActivity","On success successly");
                         String userName = Objects.requireNonNull(documentSnapshot.get("userName")).toString();
+                        String imageProfile = documentSnapshot.getString("imageProfile");
+
                         binding.username.setText(userName);
+                        Glide.with(getApplicationContext()).load(imageProfile).into(binding.ivProfile);
                     }
                 })
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
