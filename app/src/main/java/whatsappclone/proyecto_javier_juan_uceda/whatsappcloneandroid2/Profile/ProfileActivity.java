@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.databinding.DataBindingUtil;
@@ -44,6 +45,7 @@ import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Common.Com
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Display.ViewImageActivity;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.databinding.ActivityProfileBinding;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.stanup.WelcomeScreenActivity;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -104,6 +106,12 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(ProfileActivity.this, ViewImageActivity.class);
                 startActivity(intent,image.toBundle());
 
+            }
+        });
+        binding.btnSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogSignOut();
             }
         });
     }
@@ -323,4 +331,25 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void showDialogSignOut(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+        builder.setMessage("Do you want to sign out?");
+        builder.setPositiveButton("Sign out", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getApplicationContext(), WelcomeScreenActivity.class));
+            }
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
 }
