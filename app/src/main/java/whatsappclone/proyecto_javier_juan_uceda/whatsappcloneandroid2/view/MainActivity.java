@@ -21,10 +21,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.concurrent.Delayed;
 
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Contacts.ContactsActivity;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu.CallsFragment;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu.ChatsFragment;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu.StatusFragment;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.adapter.ContactsListAdapter;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.databinding.ActivityMainBinding;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Settings.SettingsActivity;
 
@@ -143,7 +145,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 binding.fabAction.setImageDrawable(getDrawable(DRAWABLES[icon]));
-
+                switch (icon){
+                    case 0: startActivity(new Intent(MainActivity.this, ContactsActivity.class));break;
+                    case 1: break;
+                    case 2: break;
+                }
                 binding.fabAction.show();
             }
         },400);
