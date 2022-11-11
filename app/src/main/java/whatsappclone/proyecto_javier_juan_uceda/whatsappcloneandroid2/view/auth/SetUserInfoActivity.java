@@ -73,9 +73,9 @@ public class SetUserInfoActivity extends AppCompatActivity {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
             String uid = firebaseUser.getUid();
-            Users users = new Users(binding.etName.getText().toString(),firebaseUser.getPhoneNumber(),"","","","","","","","");
+            Users users = new Users(uid,binding.etName.getText().toString(),firebaseUser.getPhoneNumber(),"","","","","","","");
             //firebaseFirestore.collection("Users").document(firebaseUser.getUid()).update("username",binding.etName.getText().toString())
-            firebaseFirestore.collection("Users").document(firebaseUser.getUid()).set(users)
+            firebaseFirestore.collection("Users").document(uid).set(users)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {

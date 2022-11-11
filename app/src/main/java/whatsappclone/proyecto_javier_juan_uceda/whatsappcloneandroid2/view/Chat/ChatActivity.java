@@ -195,7 +195,7 @@ public class ChatActivity extends AppCompatActivity {
             DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("ChatList").child(receiver).child(user.getUid());
             chatRef2.child("chatId").setValue(user.getUid());
 
-            readChats();
+           // readChats();
 
         } catch (Exception e) {
             e.printStackTrace();
