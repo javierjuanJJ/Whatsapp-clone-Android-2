@@ -71,9 +71,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar" />
+            android:layout_below="@+id/toolbar"
+            android:layout_above="@id/layoutAction"
+            android:id="@+id/recyclerView"/>
 
         <LinearLayout
+            android:id="@+id/layoutAction"
             android:backgroundTint="#D7DFD7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
