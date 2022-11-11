@@ -41,15 +41,7 @@ public class SetUserInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // pickImage();
-                Toast.makeText(SetUserInfoActivity.this, "Please input the name first", Toast.LENGTH_SHORT).show();
 
-            }
-        });
-        progressDialog = new ProgressDialog(this);
-
-        binding.ivProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 if (TextUtils.isEmpty(binding.etName.getText().toString())){
                     Toast.makeText(SetUserInfoActivity.this, "Please input the name first", Toast.LENGTH_SHORT).show();
                 }
@@ -58,6 +50,18 @@ public class SetUserInfoActivity extends AppCompatActivity {
                 }
 
 
+
+            }
+        });
+        progressDialog = new ProgressDialog(this);
+
+        binding.ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (TextUtils.isEmpty(binding.etName.getText().toString())){
+                    Toast.makeText(SetUserInfoActivity.this, "Please input the name first", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

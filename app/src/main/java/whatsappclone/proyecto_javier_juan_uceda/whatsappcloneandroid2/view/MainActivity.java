@@ -146,9 +146,9 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 binding.fabAction.setImageDrawable(getDrawable(DRAWABLES[icon]));
                 switch (icon){
-                    case 0: startActivity(new Intent(MainActivity.this, ContactsActivity.class));break;
+                    case 0: break;
                     case 1: break;
-                    case 2: break;
+                    case 2: startActivity(new Intent(MainActivity.this, ContactsActivity.class));break;
                 }
                 binding.fabAction.show();
             }

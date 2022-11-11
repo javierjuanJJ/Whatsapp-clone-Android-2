@@ -117,13 +117,14 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void readChats() {
+        listChats.clear();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         reference.child("Chats").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshotValue : snapshot.getChildren()) {
                     Chat chat = snapshotValue.getValue(Chat.class);
-                    if (chat != null && chat.getSender().equals(user.getUid()) && chat.getReceiver().equals(receiver) ) {
+                    if (chat != null && !chat.getTextMessage().isEmpty() && chat.getSender().equals(user.getUid()) && chat.getReceiver().equals(receiver) ) {
                         listChats.add(chat);
                     }
                 }
@@ -149,7 +150,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void initBtnClick() {
-        if (isEmptyMessage()){
+        if (!isEmptyMessage()){
             sendMessageText(binding.etMessage.getText().toString());
 
             binding.etMessage.setText("");
@@ -193,6 +194,9 @@ public class ChatActivity extends AppCompatActivity {
 
             DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("ChatList").child(receiver).child(user.getUid());
             chatRef2.child("chatId").setValue(user.getUid());
+
+            readChats();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
