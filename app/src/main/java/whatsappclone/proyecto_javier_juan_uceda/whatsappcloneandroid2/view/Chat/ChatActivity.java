@@ -110,7 +110,8 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshotValue : snapshot.getChildren()) {
                     Chat chat = snapshotValue.getValue(Chat.class);
-                    if (chat != null && !chat.getTextMessage().isEmpty() && chat.getSender().equals(user.getUid()) && chat.getReceiver().equals(receiver) ) {
+                    if (chat != null && !chat.getTextMessage().isEmpty() && chat.getSender().equals(user.getUid()) && chat.getReceiver().equals(receiver)
+                    || chat.getReceiver().equals(user.getUid()) && chat.getSender().equals(receiver)) {
                         listChats.add(chat);
                     }
                 }
