@@ -63,10 +63,17 @@ public class ChatActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference();
 
-        if (userId != null) {
-            binding.tvUsername.setText(userName);
+        if (receiver != null) {
+            if (userId != null) {
+                binding.tvUsername.setText(userName);
 
-            Glide.with(ChatActivity.this).load(userProfile).into(binding.ivPlaceHolder);
+                if (userProfile.equals("")) {
+                    binding.ivPlaceHolder.setImageResource(R.drawable.placeholder);
+                }
+                else {
+                    Glide.with(getApplicationContext()).load(userProfile).into(binding.ivPlaceHolder);
+                }
+            }
         }
 
         receiver = userId;
