@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> -->
@@ -15,66 +15,73 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WhatsappCloneAndroid2"
-        tools:targetApi="31">
+        tools:targetApi="31" >
         <activity
-            android:name=".view.Chat.ChatActivity"
-            android:exported="false">
+            android:name=".UserProfileActivity"
+            android:exported="false" >
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".view.Activities.Chat.ChatActivity"
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Contacts.ContactsActivity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Display.ViewImageActivity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Profile.ProfileActivity"
-            android:exported="false">
+            android:name=".view.Activities.Profile.ProfileActivity"
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".view.Settings.SettingsActivity"
-            android:exported="false">
+            android:name=".view.Activities.Settings.SettingsActivity"
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".view.auth.SetUserInfoActivity"
-            android:exported="false">
+            android:name=".view.Activities.auth.SetUserInfoActivity"
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".view.auth.PhoneLoginActivity"
-            android:exported="false">
+            android:name=".view.Activities.auth.PhoneLoginActivity"
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".view.stanup.WelcomeScreenActivity"
-            android:exported="false">
+            android:name=".view.Activities.stanup.WelcomeScreenActivity"
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".view.stanup.SplashActivity"
-            android:exported="true">
+            android:name=".view.Activities.stanup.SplashActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -87,7 +94,7 @@
         </activity>
         <activity
             android:name=".view.MainActivity"
-            android:exported="true">
+            android:exported="true" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

@@ -1,4 +1,4 @@
-package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Profile;
+package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Activities.Profile;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -45,7 +45,7 @@ import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Common.Com
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Display.ViewImageActivity;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.databinding.ActivityProfileBinding;
-import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.stanup.WelcomeScreenActivity;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Activities.stanup.WelcomeScreenActivity;
 
 public class ProfileActivity extends AppCompatActivity {
 

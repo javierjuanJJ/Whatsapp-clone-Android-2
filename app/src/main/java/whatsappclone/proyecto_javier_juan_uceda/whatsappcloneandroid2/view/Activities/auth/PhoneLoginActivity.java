@@ -1,4 +1,4 @@
-package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.auth;
+package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Activities.auth;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,10 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,16 +19,12 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.security.ProtectionDomain;
 import java.util.concurrent.TimeUnit;
 
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.databinding.ActivityPhoneLoginBinding;
-import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.Users.Users;
-import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.MainActivity;
 
 public class PhoneLoginActivity extends AppCompatActivity {
 

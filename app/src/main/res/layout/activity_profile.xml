@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
 
-        tools:context=".Profile.ProfileActivity">
+        tools:context=".view.Activities.Profile.ProfileActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"

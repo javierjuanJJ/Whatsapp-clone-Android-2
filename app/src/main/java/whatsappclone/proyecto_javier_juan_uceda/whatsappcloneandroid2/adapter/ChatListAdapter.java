@@ -18,7 +18,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.ChatList;
-import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Chat.ChatActivity;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Activities.Chat.ChatActivity;
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.Holder> {
 

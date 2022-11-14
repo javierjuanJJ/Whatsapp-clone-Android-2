@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.Users.Users;
-import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Chat.ChatActivity;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Activities.Chat.ChatActivity;
 
 public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapter.ViewHolder> {
 

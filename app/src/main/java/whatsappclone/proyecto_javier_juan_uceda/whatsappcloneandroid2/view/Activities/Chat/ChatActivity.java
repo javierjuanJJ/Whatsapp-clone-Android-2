@@ -1,4 +1,4 @@
-package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Chat;
+package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Activities.Chat;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +35,7 @@ import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.adapter.ChatAdapter;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.databinding.ActivityChatBinding;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.Chat.Chat;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Activities.Profile.UserProfileActivity;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -45,6 +46,8 @@ public class ChatActivity extends AppCompatActivity {
     private String receiver;
     private ChatAdapter chatAdapter;
     private ArrayList<Chat> listChats;
+    private String userProfile;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +59,9 @@ public class ChatActivity extends AppCompatActivity {
     private void setUI() {
         Intent intent = getIntent();
 
-        String userName = intent.getStringExtra("userName");
+        userName = intent.getStringExtra("userName");
         String userId = intent.getStringExtra("userId");
-        String userProfile = intent.getStringExtra("userProfile");
+        userProfile = intent.getStringExtra("userProfile");
         listChats = new ArrayList<>();
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference();
@@ -156,6 +159,17 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendMessageText(binding.etMessage.getText().toString());
+            }
+        });
+
+        binding.ivPlaceHolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ChatActivity.this, UserProfileActivity.class)
+                        .putExtra("userId",receiver)
+                        .putExtra("userName",userName)
+                        .putExtra("userProfile",userProfile)
+                );
             }
         });
 

@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:background="#D7DFD7"
         android:layout_height="match_parent"
-        tools:context=".view.Chat.ChatActivity">
+        tools:context=".view.Activities.Chat.ChatActivity">
 
         <Toolbar
             android:id="@+id/toolbar"

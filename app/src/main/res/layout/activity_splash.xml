@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.stanup.SplashActivity">
+    tools:context=".view.Activities.stanup.SplashActivity">
     
     <ImageView
         android:id="@+id/icon"

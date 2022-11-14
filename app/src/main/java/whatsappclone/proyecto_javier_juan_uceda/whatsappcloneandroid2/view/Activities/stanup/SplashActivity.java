@@ -1,4 +1,4 @@
-package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.stanup;
+package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Activities.stanup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,7 +11,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.MainActivity;
-import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.auth.PhoneLoginActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
