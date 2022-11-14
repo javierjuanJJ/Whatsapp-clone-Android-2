@@ -15,6 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:id="@+id/layout"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_marginTop="30dp"
@@ -53,6 +54,12 @@
                 android:text="Chat with your friends who are use Whatsapp in phone." />
 
         </LinearLayout>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/prograssbar"/>
 
     </FrameLayout>
 </layout>

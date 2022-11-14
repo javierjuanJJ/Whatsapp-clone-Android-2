@@ -71,20 +71,6 @@ public class ChatActivity extends AppCompatActivity {
 
         receiver = userId;
 
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-        binding.fabChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendMessageText(binding.etMessage.getText().toString());
-            }
-        });
-
         binding.etMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -150,6 +136,21 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void initBtnClick() {
+
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        binding.fabChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessageText(binding.etMessage.getText().toString());
+            }
+        });
+
         if (!isEmptyMessage()){
             sendMessageText(binding.etMessage.getText().toString());
 

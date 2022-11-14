@@ -1,6 +1,7 @@
 package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,13 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.ChatList;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Chat.ChatActivity;
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.Holder> {
 
    private List<ChatList> chatLists = new ArrayList<>(0);
    private Context context;
+
 
    public ChatListAdapter(List<ChatList> chatLists, Context context) {
       this.chatLists = chatLists;
@@ -44,6 +47,15 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.Holder
       holder.tvDate.setText(chatList.getDate());
 
       Glide.with(context).load(chatList.getUrlProfile()).into(holder.profile);
+      holder.itemView.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+            context.startActivity(new Intent(context, ChatActivity.class)
+                    .putExtra("userId",chatList.getUserID())
+                    .putExtra("userName",chatList.getUserName())
+                    .putExtra("userProfile",chatList.getUrlProfile()));
+         }
+      });
    }
 
    /**
