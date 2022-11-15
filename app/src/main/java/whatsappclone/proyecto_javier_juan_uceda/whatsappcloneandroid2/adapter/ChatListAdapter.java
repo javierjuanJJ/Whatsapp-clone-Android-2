@@ -26,6 +26,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.Holder
    private Context context;
 
 
+
+
    public ChatListAdapter(List<ChatList> chatLists, Context context) {
       this.chatLists = chatLists;
       this.context = context;

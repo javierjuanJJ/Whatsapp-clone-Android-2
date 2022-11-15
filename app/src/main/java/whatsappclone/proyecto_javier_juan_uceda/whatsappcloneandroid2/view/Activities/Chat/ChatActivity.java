@@ -1,6 +1,5 @@
 package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Activities.Chat;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,25 +11,19 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Interfaces.OnSendMessageCallback;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Interfaces.onReadChatCallback;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Managers.ChatServices;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.adapter.ChatAdapter;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.databinding.ActivityChatBinding;
@@ -41,14 +34,13 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = ChatActivity.class.getSimpleName();
     private ActivityChatBinding binding;
-    private FirebaseUser user;
-    private DatabaseReference reference;
     private String receiver;
     private ChatAdapter chatAdapter;
     private ArrayList<Chat> listChats;
     private String userProfile;
     private String userName;
     private boolean isActionActive;
+    private ChatServices chatServices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +50,16 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void setUI() {
+        initialize();
+        readChats();
+    }
+
+    private void initialize() {
         Intent intent = getIntent();
 
         userName = intent.getStringExtra("userName");
         String userId = intent.getStringExtra("userId");
         userProfile = intent.getStringExtra("userProfile");
-        listChats = new ArrayList<>();
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference();
 
         if (receiver != null) {
             if (userId != null) {
@@ -82,38 +76,30 @@ public class ChatActivity extends AppCompatActivity {
 
         receiver = userId;
 
-        binding.etMessage.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                int layoutId = isEmptyMessage() ? R.drawable.ic_baseline_keyboard_voice_24 : R.drawable.ic_baseline_send_24;
-                binding.fabChat.setImageDrawable(getDrawable(layoutId));
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
         initBtnClick();
-
+        chatServices = new ChatServices(ChatActivity.this, receiver);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
         linearLayoutManager.setStackFromEnd(true);
         binding.recyclerView.setLayoutManager(linearLayoutManager);
-
-        readChats();
-
-
     }
 
     private void readChats() {
+        chatServices.readChatServices(new onReadChatCallback() {
+            @Override
+            public void onReadSuccess(ArrayList<Chat> listChat) {
+                chatAdapter.setListChat(listChat);
+            }
+
+            @Override
+            public void onReadFailure(Exception e) {
+                Log.e(TAG, e.getMessage());
+                Toast.makeText(ChatActivity.this, "Error reading chats", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /*private void readChats() {
         listChats.clear();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         reference.child("Chats").addValueEventListener(new ValueEventListener() {
@@ -141,13 +127,28 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    private boolean isEmptyMessage() {
-        return TextUtils.isEmpty(binding.etMessage.getText().toString());
-    }
+    }*/
 
     private void initBtnClick() {
+
+        binding.etMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                int layoutId = chatServices.isEmptyMessage(binding.etMessage.getText().toString()) ? R.drawable.ic_baseline_keyboard_voice_24 : R.drawable.ic_baseline_send_24;
+                binding.fabChat.setImageDrawable(getDrawable(layoutId));
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +160,24 @@ public class ChatActivity extends AppCompatActivity {
         binding.fabChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessageText(binding.etMessage.getText().toString());
+                String message = binding.etMessage.getText().toString();
+                if (!chatServices.isEmptyMessage(message)){
+
+                    chatServices.sendMessageText(message, new OnSendMessageCallback() {
+                        @Override
+                        public void onSendMessageComplete() {
+                            Log.i(TAG, "Message " + message + " sent.");
+                        }
+
+                        @Override
+                        public void onSendMessageFailure(Exception e) {
+                            Log.e(TAG, e.getMessage());
+                            Toast.makeText(ChatActivity.this, "Error send message", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    binding.etMessage.setText("");
+                }
             }
         });
 
@@ -187,14 +205,9 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        if (!isEmptyMessage()){
-            sendMessageText(binding.etMessage.getText().toString());
-
-            binding.etMessage.setText("");
-        }
     }
 
-    private void sendMessageText(String textMessage) {
+    /*private void sendMessageText(String textMessage) {
         try {
             Date date = Calendar.getInstance().getTime();
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -237,5 +250,5 @@ public class ChatActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }
