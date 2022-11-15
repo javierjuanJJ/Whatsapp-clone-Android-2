@@ -55,7 +55,7 @@ public class StatusFragment extends Fragment {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         String imageProfile = documentSnapshot.getString("imageProfile");
 
-                        Glide.with(getContext()).load(imageProfile).into(binding.profile);
+                        Glide.with(getActivity()).load(imageProfile).into(binding.profile);
                     }
                 })
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

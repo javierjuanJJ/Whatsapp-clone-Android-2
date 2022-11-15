@@ -25,8 +25,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
    private static final int MSG_TYPE_LEFT = 0;
    private static final int MSG_TYPE_RIGHT = 1;
 
-   public void setListChat(ArrayList<Chat> listChat) {
-      this.listChat = listChat;
+   public void setListChat(ArrayList<Chat> listChatToAdd) {
+      this.listChat.clear();
+      this.listChat.addAll(listChatToAdd);
       notifyDataSetChanged();
    }
 

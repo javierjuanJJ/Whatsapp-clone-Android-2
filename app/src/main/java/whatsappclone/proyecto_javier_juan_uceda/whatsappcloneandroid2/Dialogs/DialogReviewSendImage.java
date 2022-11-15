@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -46,12 +47,14 @@ public class DialogReviewSendImage {
         dialog.getWindow().setAttributes(lp);
 
         image = dialog.findViewById(R.id.imageView);
-        btnSend = dialog.findViewById(R.id.btnSave);
+        btnSend = dialog.findViewById(R.id.fabSend);
 
     }
     public void show(OnShowCallback callback) {
         dialog.show();
+        Log.i("TAG", "dialog.show();");
         image.setImageBitmap(bitmap);
+        Log.i("TAG", "image.setImageBitmap(bitmap);");
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

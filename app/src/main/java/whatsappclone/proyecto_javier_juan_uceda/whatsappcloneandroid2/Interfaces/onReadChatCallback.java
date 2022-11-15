@@ -5,6 +5,6 @@ import java.util.ArrayList;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.Chat.Chat;
 
 public interface onReadChatCallback {
- void onReadSuccess(ArrayList<Chat> listChat);
+ void onReadSuccess(ArrayList<Chat> listChatToAdd);
  void onReadFailure(Exception e);
 }

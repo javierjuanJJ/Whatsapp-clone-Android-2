@@ -87,20 +87,27 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         receiver = userId;
-
+        initRecyclerView();
         initBtnClick();
-        chatServices = new ChatServices(ChatActivity.this, receiver);
+    }
 
+    private void initRecyclerView() {
+        chatServices = new ChatServices(ChatActivity.this, receiver);
+        listChats = new ArrayList<>();
+        chatAdapter = new ChatAdapter(listChats, ChatActivity.this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
         linearLayoutManager.setStackFromEnd(true);
         binding.recyclerView.setLayoutManager(linearLayoutManager);
     }
 
     private void readChats() {
+
         chatServices.readChatServices(new onReadChatCallback() {
             @Override
-            public void onReadSuccess(ArrayList<Chat> listChat) {
-                chatAdapter.setListChat(listChat);
+            public void onReadSuccess(ArrayList<Chat> listChatToAdd) {
+
+                chatAdapter = new ChatAdapter(listChatToAdd, ChatActivity.this);
+                binding.recyclerView.setAdapter(chatAdapter);
             }
 
             @Override
@@ -181,6 +188,7 @@ public class ChatActivity extends AppCompatActivity {
                         @Override
                         public void onSendMessageComplete() {
                             Log.i(TAG, "Message " + message + " sent.");
+                            readChats();
                         }
 
                         @Override
@@ -210,10 +218,12 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (isActionActive){
                     binding.layoutActions.setVisibility(View.GONE);
+                    binding.layoutActions2.setVisibility(View.GONE);
                     isActionActive = false;
                 }
                 else {
                     binding.layoutActions.setVisibility(View.VISIBLE);
+                    binding.layoutActions2.setVisibility(View.VISIBLE);
                     isActionActive = true;
                 }
             }
@@ -222,7 +232,7 @@ public class ChatActivity extends AppCompatActivity {
         binding.btnAttachmentGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                openGallery();
             }
         });
 
@@ -259,6 +269,7 @@ public class ChatActivity extends AppCompatActivity {
         dialogReviewSendImage.show(new OnShowCallback() {
             @Override
             public void onButtonSendClick() {
+                Log.i(TAG, "onButtonSendClick()");
                 if (uri != null) {
                     ProgressDialog progressDialog = new ProgressDialog(ChatActivity.this);
                     FirebaseServices firebaseServices = new FirebaseServices(ChatActivity.this);

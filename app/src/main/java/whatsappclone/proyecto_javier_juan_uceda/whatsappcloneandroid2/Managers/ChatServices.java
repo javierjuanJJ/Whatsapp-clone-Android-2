@@ -41,7 +41,7 @@ public class ChatServices {
     public void readChatServices(onReadChatCallback callback){
         if (callback != null) {
             try {
-                ArrayList<Chat> list = new ArrayList<>();
+                final ArrayList<Chat> list = new ArrayList<>();
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
                 reference.child("Chats").addValueEventListener(new ValueEventListener() {
                     @Override
@@ -54,8 +54,6 @@ public class ChatServices {
                             }
                         }
                         callback.onReadSuccess(list);
-
-
                     }
 
                     @Override
