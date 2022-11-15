@@ -1,18 +1,27 @@
 package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.Chat;
 
 public class Chat {
-   private String dateTime, textMessage, type, sender, receiver;
+   private String dateTime, textMessage, type, sender, receiver, uri;
 
    public Chat() {
 
    }
 
-   public Chat(String dateTime, String textMessage, String type, String sender, String receiver) {
+   public Chat(String dateTime, String textMessage, String type, String sender, String receiver, String uri) {
       this.dateTime = dateTime;
       this.textMessage = textMessage;
       this.type = type;
       this.sender = sender;
       this.receiver = receiver;
+      this.uri = uri;
+   }
+
+   public String getUri() {
+      return uri;
+   }
+
+   public void setUri(String uri) {
+      this.uri = uri;
    }
 
    public String getDateTime() {

@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Interfaces.OnSendMessageCallback;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Interfaces.OnUploadImageCallback;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Interfaces.onReadChatCallback;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.Chat.Chat;
 
@@ -70,45 +71,90 @@ public class ChatServices {
 
 
     public void sendMessageText(String textMessage, OnSendMessageCallback onSendMessageCallback) {
-        try {
-            Date date = Calendar.getInstance().getTime();
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        if (onSendMessageCallback != null) {
+            try {
 
-            Calendar currentDateTime = Calendar.getInstance();
-            String today = formatter.format(date);
-            SimpleDateFormat df = new SimpleDateFormat("hh:mm a");
+                Chat chat = new Chat(getCurrentTime(), textMessage, "TEXT", user.getUid(), receiverId,"");
 
-            String currentTime = df.format(currentDateTime.getTime());
-            Chat chat = new Chat(today + ", " + currentTime, textMessage, "TEXT", user.getUid(), receiverId);
+                reference.child("Chats").push().setValue(chat)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
 
-            reference.child("Chats").push().setValue(chat)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
+                            }
+                        })
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                onSendMessageCallback.onSendMessageComplete();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                onSendMessageCallback.onSendMessageFailure(e);
+                            }
+                        });
 
-                        }
-                    })
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            onSendMessageCallback.onSendMessageComplete();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            onSendMessageCallback.onSendMessageFailure(e);
-                        }
-                    });
+                DatabaseReference chatRef1 = FirebaseDatabase.getInstance().getReference("ChatList").child(user.getUid()).child(receiverId);
+                chatRef1.child("chatId").setValue(receiverId);
 
-            DatabaseReference chatRef1 = FirebaseDatabase.getInstance().getReference("ChatList").child(user.getUid()).child(receiverId);
-            chatRef1.child("chatId").setValue(receiverId);
+                DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("ChatList").child(receiverId).child(user.getUid());
+                chatRef2.child("chatId").setValue(user.getUid());
 
-            DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("ChatList").child(receiverId).child(user.getUid());
-            chatRef2.child("chatId").setValue(user.getUid());
+            } catch (Exception e) {
+                onSendMessageCallback.onSendMessageFailure(e);
+            }
+        }
+    }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+    public String getCurrentTime() {
+        Date date = Calendar.getInstance().getTime();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+        Calendar currentDateTime = Calendar.getInstance();
+        String today = formatter.format(date);
+        SimpleDateFormat df = new SimpleDateFormat("hh:mm a");
+
+        String currentTime = df.format(currentDateTime.getTime());
+        return today + ", " + currentTime;
+    }
+
+    public void setImage(String imageUrl, OnUploadImageCallback callback){
+        if (callback != null) {
+            try {
+
+                Chat chat = new Chat(getCurrentTime(), imageUrl, "IMAGE", user.getUid(), receiverId, imageUrl);
+
+                reference.child("Chats").push().setValue(chat)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                callback.onUploadSuccess(imageUrl);
+                            }
+                        })
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                callback.onUploadSuccess(imageUrl);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                callback.onUploadFailure(e);
+                            }
+                        });
+
+                DatabaseReference chatRef1 = FirebaseDatabase.getInstance().getReference("ChatList").child(user.getUid()).child(receiverId);
+                chatRef1.child("chatId").setValue(receiverId);
+
+                DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("ChatList").child(receiverId).child(user.getUid());
+                chatRef2.child("chatId").setValue(user.getUid());
+
+            } catch (Exception e) {
+                callback.onUploadFailure(e);
+            }
         }
     }
 
