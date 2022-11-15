@@ -48,6 +48,7 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<Chat> listChats;
     private String userProfile;
     private String userName;
+    private boolean isActionActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +171,19 @@ public class ChatActivity extends AppCompatActivity {
                         .putExtra("userName",userName)
                         .putExtra("userProfile",userProfile)
                 );
+            }
+        });
+        binding.ivAttachment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isActionActive){
+                    binding.layoutActions.setVisibility(View.GONE);
+                    isActionActive = false;
+                }
+                else {
+                    binding.layoutActions.setVisibility(View.VISIBLE);
+                    isActionActive = true;
+                }
             }
         });
 
