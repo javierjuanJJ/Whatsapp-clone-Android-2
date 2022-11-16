@@ -4,12 +4,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -65,14 +68,30 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
    public class ViewHolder extends RecyclerView.ViewHolder {
 
       private TextView textMessage;
-
+      private LinearLayout layoutText, layoutImage;
+      private ImageView imageMessage;
       public ViewHolder(@NonNull View itemView) {
          super(itemView);
          textMessage = itemView.findViewById(R.id.tvTextMenssage);
+         layoutText = itemView.findViewById(R.id.layoutText);
+         layoutImage = itemView.findViewById(R.id.layoutImage);
+         imageMessage = itemView.findViewById(R.id.ivImageMessage);
       }
 
       void bind(Chat chat){
          textMessage.setText(chat.getTextMessage());
+         switch (chat.getType()){
+            case "TEXT":
+               layoutText.setVisibility(View.VISIBLE);
+               layoutImage.setVisibility(View.GONE);
+               textMessage.setText(chat.getTextMessage());
+               break;
+            case "IMAGE":
+               layoutText.setVisibility(View.GONE);
+               layoutImage.setVisibility(View.VISIBLE);
+               Glide.with(context).load(chat.getUri()).into(imageMessage);
+               break;
+         }
       }
    }
 }

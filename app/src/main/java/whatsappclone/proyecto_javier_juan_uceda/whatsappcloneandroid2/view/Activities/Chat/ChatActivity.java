@@ -275,6 +275,10 @@ public class ChatActivity extends AppCompatActivity {
                     FirebaseServices firebaseServices = new FirebaseServices(ChatActivity.this);
 
                     progressDialog.setMessage("Please wait... ");
+                    progressDialog.show();
+
+                    binding.layoutActions.setVisibility(View.GONE);
+                    isActionActive = false;
 
                     firebaseServices.uploadToFirebase(uri, new OnImageSetCallback() {
                         @Override
@@ -291,6 +295,7 @@ public class ChatActivity extends AppCompatActivity {
                                     Log.e(TAG, e.getMessage());
                                 }
                             });
+                            progressDialog.dismiss();
                         }
 
                         @Override
