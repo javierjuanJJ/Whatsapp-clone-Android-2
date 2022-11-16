@@ -163,7 +163,7 @@ public class ChatServices {
     }
     public void sendVoice(String audioPath){
         Uri uriAudio = Uri.fromFile(new File(audioPath));
-        final StorageReference audioRef = FirebaseStorage.getInstance().getReference().child("Chats/Voice" + System.currentTimeMillis());
+        final StorageReference audioRef = FirebaseStorage.getInstance().getReference().child("Chats/Voice" + System.currentTimeMillis() + ".mp3");
         audioRef.putFile(uriAudio).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

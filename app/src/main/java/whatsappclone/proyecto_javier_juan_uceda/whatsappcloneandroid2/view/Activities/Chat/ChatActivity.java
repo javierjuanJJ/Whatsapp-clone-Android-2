@@ -106,11 +106,19 @@ public class ChatActivity extends AppCompatActivity {
         initRecyclerView();
         initBtnClick();
         binding.recordButton.setRecordView(binding.recordView);
+
+        /*binding.recordButton.setOnRecordClickListener(new OnRecordClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });*/
+
         binding.recordView.setOnRecordListener(new OnRecordListener() {
             @Override
             public void onStart() {
 
-                if (checkPermissionFromDevice()){
+                if (!checkPermissionFromDevice()){
                     binding.ivEmoticon.setVisibility(View.INVISIBLE);
                     binding.ivAttachment.setVisibility(View.INVISIBLE);
                     binding.ivCamera.setVisibility(View.INVISIBLE);
@@ -119,8 +127,6 @@ public class ChatActivity extends AppCompatActivity {
                     if (vibrator != null) {
                         vibrator.vibrate(100);
                     }
-                    startRecord();
-
                 }
                 else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -128,12 +134,15 @@ public class ChatActivity extends AppCompatActivity {
                     }
                 }
 
+                startRecord();
+
             }
 
             @Override
             public void onCancel() {
                 try {
-                    mediaRecorder.reset();
+
+                    //mediaRecorder.reset();
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -165,6 +174,7 @@ public class ChatActivity extends AppCompatActivity {
                 binding.ivAttachment.setVisibility(View.VISIBLE);
                 binding.ivCamera.setVisibility(View.VISIBLE);
                 binding.etMessage.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -179,13 +189,20 @@ public class ChatActivity extends AppCompatActivity {
     private String sTime;
 
     private void stopRecord(){
+        Log.i("sendVoice","stopRecord()");
         try {
             if (mediaRecorder != null){
+                Log.i("sendVoice","mediaRecorder != null");
                 mediaRecorder.stop();
+                Log.i("sendVoice","mediaRecorder.stop();");
                 mediaRecorder.reset();
-                mediaRecorder.release();
-                mediaRecorder = null;
+                Log.i("sendVoice"," mediaRecorder.reset();");
+                //mediaRecorder.release();
+                Log.i("sendVoice"," mediaRecorder.release();");
+                //mediaRecorder = null;
+                Log.i("sendVoice","mediaRecorder = null;");
                 chatServices.sendVoice(audioPath);
+                Log.i("sendVoice","chatServices.sendVoice(audioPath);");
                 //addVoiceToList(audioPath);
                 //uploadVoice();
             }
@@ -203,11 +220,17 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void startRecord() {
+
+        mediaRecorder = new MediaRecorder();
+        Log.i("sendVoice","mediaRecorder = new MediaRecorder();");
         setUpMediaRecorder();
+        Log.i("sendVoice","setUpMediaRecorder();");
 
         try {
             mediaRecorder.prepare();
+            Log.i("sendVoice","mediaRecorder.prepare();");
             mediaRecorder.start();
+            Log.i("sendVoice","mediaRecorder.start();");
         } catch (IOException e) {
             Toast.makeText(ChatActivity.this, "Recording error, please restart the App", Toast.LENGTH_SHORT).show();
             Log.e(TAG, e.getMessage());
@@ -222,28 +245,15 @@ public class ChatActivity extends AppCompatActivity {
     private String audioPath;
 
     private void setUpMediaRecorder() {
-        //String pathName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + UUID.randomUUID().toString() + "" + "audio_record.m4a";
-        // String pathName = getExternalCacheDir().getAbsolutePath() + "/audiorecordtest.3gp";
-        //String pathName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + UUID.randomUUID().toString() + "/audiorecordtest.3gp";
         String pathName = "";
-        //File dir = Environment.getExternalStorageDirectory();
         File dir = Environment.getExternalStorageDirectory().getAbsoluteFile();
-//        try {
-//            //pathName = (File.createTempFile("audiorecordtest", ".3gp", dir)).getAbsolutePath();
-//            pathName = (new File(dir.getAbsolutePath() + "/" + "audiorecordtest.3gp")).getAbsolutePath();
-//        } catch (IOException e) {
-//            Log.e(TAG, "external storage access error");
-//            return;
-//        }
-        pathName = (new File(dir + "/" + "audiorecordtest.3gp")).getAbsolutePath();
+
+        pathName = (new File(dir + "/" + "audiorecordtest.m4a")).getAbsolutePath();
 
         Log.i(TAG, pathName);
         audioPath = pathName;
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            mediaRecorder = new MediaRecorder(ChatActivity.this);
-//        }
-        mediaRecorder = new MediaRecorder();
+
 
         try {
 
@@ -252,18 +262,14 @@ public class ChatActivity extends AppCompatActivity {
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             mediaRecorder.setOutputFile(pathName);
 
-
-//            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-//            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-//            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-//            mediaRecorder.setOutputFile(pathName);
         } catch (IllegalStateException e) {
-            //Log.e(TAG, e.getMessage());
             Log.e(TAG, "IllegalStateException " + e.getMessage());
+            //e.printStackTrace();
 
         }
         catch (Exception e) {
             Log.e(TAG, "Exception " + e.getMessage());
+            //e.printStackTrace();
         }
 
 
@@ -272,8 +278,13 @@ public class ChatActivity extends AppCompatActivity {
     private boolean checkPermissionFromDevice(){
         int writeStorageStorageResult = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int recordAudioResult = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
+        int manageExternalStorageResult = ContextCompat.checkSelfPermission(this, Manifest.permission.MANAGE_EXTERNAL_STORAGE);
+        int readExternalStorageResult = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
 
-        return writeStorageStorageResult == PackageManager.PERMISSION_DENIED || recordAudioResult == PackageManager.PERMISSION_DENIED;
+        return writeStorageStorageResult == PackageManager.PERMISSION_DENIED
+                || recordAudioResult == PackageManager.PERMISSION_DENIED
+                || manageExternalStorageResult == PackageManager.PERMISSION_DENIED
+                || readExternalStorageResult == PackageManager.PERMISSION_DENIED;
 
 
     }
@@ -282,6 +293,7 @@ public class ChatActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.RECORD_AUDIO,
         }, REQUEST_CORD_PERMISSION);
     }
