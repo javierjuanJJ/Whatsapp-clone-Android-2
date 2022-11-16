@@ -20,6 +20,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.devlomi.record_view.OnBasketAnimationEnd;
+import com.devlomi.record_view.OnRecordClickListener;
+import com.devlomi.record_view.OnRecordListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -89,6 +92,45 @@ public class ChatActivity extends AppCompatActivity {
         receiver = userId;
         initRecyclerView();
         initBtnClick();
+        binding.recordButton.setRecordView(binding.recordView);
+        binding.recordView.setOnRecordListener(new OnRecordListener() {
+            @Override
+            public void onStart() {
+                binding.ivEmoticon.setVisibility(View.INVISIBLE);
+                binding.ivAttachment.setVisibility(View.INVISIBLE);
+                binding.ivCamera.setVisibility(View.INVISIBLE);
+                binding.etMessage.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onFinish(long recordTime, boolean limitReached) {
+                binding.ivEmoticon.setVisibility(View.VISIBLE);
+                binding.ivAttachment.setVisibility(View.VISIBLE);
+                binding.ivCamera.setVisibility(View.VISIBLE);
+                binding.etMessage.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onLessThanSecond() {
+
+            }
+        });
+
+        binding.recordView.setOnBasketAnimationEndListener(new OnBasketAnimationEnd() {
+            @Override
+            public void onAnimationEnd() {
+                binding.ivEmoticon.setVisibility(View.VISIBLE);
+                binding.ivAttachment.setVisibility(View.VISIBLE);
+                binding.ivCamera.setVisibility(View.VISIBLE);
+                binding.etMessage.setVisibility(View.VISIBLE);
+            }
+        });
+
     }
 
     private void initRecyclerView() {
@@ -160,8 +202,16 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                int layoutId = chatServices.isEmptyMessage(binding.etMessage.getText().toString()) ? R.drawable.ic_baseline_keyboard_voice_24 : R.drawable.ic_baseline_send_24;
-                binding.fabChat.setImageDrawable(getDrawable(layoutId));
+//                int layoutId = chatServices.isEmptyMessage(binding.etMessage.getText().toString()) ? R.drawable.ic_baseline_keyboard_voice_24 : R.drawable.ic_baseline_send_24;
+//                binding.fabChat.setImageDrawable(getDrawable(layoutId));
+
+                if (chatServices.isEmptyMessage(binding.etMessage.getText().toString())){
+                    binding.fabChat.setImageDrawable(getDrawable(R.drawable.ic_baseline_keyboard_voice_24));
+                }
+                else {
+                    binding.fabChat.setVisibility(View.VISIBLE);
+                    binding.recordButton.setVisibility(View.INVISIBLE);
+                }
 
             }
 

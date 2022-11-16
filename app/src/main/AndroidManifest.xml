@@ -17,7 +17,7 @@
         android:theme="@style/Theme.WhatsappCloneAndroid2"
         tools:targetApi="31">
         <activity
-            android:name=".ReviewSendImageActivity"
+            android:name=".Display.ReviewSendImageActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
