@@ -2,14 +2,23 @@ package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Acti
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -28,7 +37,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Dialogs.DialogReviewSendImage;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Interfaces.OnImageSetCallback;
@@ -96,15 +108,33 @@ public class ChatActivity extends AppCompatActivity {
         binding.recordView.setOnRecordListener(new OnRecordListener() {
             @Override
             public void onStart() {
-                binding.ivEmoticon.setVisibility(View.INVISIBLE);
-                binding.ivAttachment.setVisibility(View.INVISIBLE);
-                binding.ivCamera.setVisibility(View.INVISIBLE);
-                binding.etMessage.setVisibility(View.INVISIBLE);
+
+                if (!checkPermissionFromDevice()){
+                    binding.ivEmoticon.setVisibility(View.INVISIBLE);
+                    binding.ivAttachment.setVisibility(View.INVISIBLE);
+                    binding.ivCamera.setVisibility(View.INVISIBLE);
+                    binding.etMessage.setVisibility(View.INVISIBLE);
+                    Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                    if (vibrator != null) {
+                        vibrator.vibrate(100);
+                    }
+                    startRecord();
+                }
+                else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        requestPermissions();
+                    }
+                }
+
             }
 
             @Override
             public void onCancel() {
-
+                try {
+                    mediaRecorder.reset();
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
             }
 
             @Override
@@ -113,6 +143,9 @@ public class ChatActivity extends AppCompatActivity {
                 binding.ivAttachment.setVisibility(View.VISIBLE);
                 binding.ivCamera.setVisibility(View.VISIBLE);
                 binding.etMessage.setVisibility(View.VISIBLE);
+
+                sTime = getHumanTime(System.currentTimeMillis());
+
             }
 
             @Override
@@ -131,6 +164,86 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private String getHumanTime(long currentTimeMillis) {
+        return String.format("%02d", TimeUnit.MILLISECONDS.toSeconds(currentTimeMillis) - TimeUnit.MILLISECONDS.toMinutes(currentTimeMillis));
+    }
+
+    private static final int REQUEST_CORD_PERMISSION = 332;
+    private MediaRecorder mediaRecorder;
+    private String sTime;
+
+    private void stopRecord(){
+        try {
+            if (mediaRecorder != null){
+                mediaRecorder.stop();
+                mediaRecorder.reset();
+                mediaRecorder.release();
+                mediaRecorder = null;
+                chatServices.sendVoice(audioPath);
+                //addVoiceToList(audioPath);
+                //uploadVoice();
+            }
+            else {
+                Toast.makeText(this, "Null", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IllegalStateException e) {
+            Toast.makeText(this, "Error uploading voice IllegalStateException", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, e.getMessage());
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Error uploading voice", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
+    private void startRecord() {
+        setUpMediaRecorder();
+
+        try {
+            mediaRecorder.prepare();
+            mediaRecorder.start();
+        } catch (IOException e) {
+            Toast.makeText(ChatActivity.this, "Recording error, please restart the App", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, e.getMessage());
+        }
+
+    }
+
+    private String audioPath;
+
+    private void setUpMediaRecorder() {
+        String pathName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + UUID.randomUUID().toString() + "audio_record.m4a";
+        audioPath = pathName;
+
+        mediaRecorder = new MediaRecorder();
+
+        try {
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+            mediaRecorder.setOutputFile(pathName);
+        } catch (IllegalStateException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+    }
+
+    private boolean checkPermissionFromDevice(){
+        int writeStorageStorageResult = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int recordAudioResult = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
+
+        return writeStorageStorageResult == PackageManager.PERMISSION_DENIED || recordAudioResult == PackageManager.PERMISSION_DENIED;
+
+
+    }
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.RECORD_AUDIO,
+        }, REQUEST_CORD_PERMISSION);
     }
 
     private void initRecyclerView() {

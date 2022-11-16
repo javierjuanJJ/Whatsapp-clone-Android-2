@@ -1,6 +1,7 @@
 package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Managers;
 
 import android.content.Context;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -16,7 +17,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -155,7 +160,49 @@ public class ChatServices {
             }
         }
     }
+    public void sendVoice(String audioPath){
+        Uri uriAudio = Uri.fromFile(new File(audioPath));
+        final StorageReference audioRef = FirebaseStorage.getInstance().getReference().child("Chats/Voice" + System.currentTimeMillis());
+        audioRef.putFile(uriAudio).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                while (!urlTask.isSuccessful());
 
+                Uri downloadUrl = urlTask.getResult();
+                String voiceUrl = String.valueOf(downloadUrl);
+
+                Chat chat = new Chat(getCurrentTime(), "", "VOICE", user.getUid(), receiverId, audioPath);
+
+                reference.child("Chats").push().setValue(chat)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+
+                            }
+                        })
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+
+                DatabaseReference chatRef1 = FirebaseDatabase.getInstance().getReference("ChatList").child(user.getUid()).child(receiverId);
+                chatRef1.child("chatId").setValue(receiverId);
+
+                DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("ChatList").child(receiverId).child(user.getUid());
+                chatRef2.child("chatId").setValue(user.getUid());
+
+            }
+        });
+    }
 
     public boolean isEmptyMessage(String message) {
         return TextUtils.isEmpty(message);
