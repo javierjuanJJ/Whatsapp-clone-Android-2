@@ -37,6 +37,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -109,7 +110,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onStart() {
 
-                if (!checkPermissionFromDevice()){
+                if (checkPermissionFromDevice()){
                     binding.ivEmoticon.setVisibility(View.INVISIBLE);
                     binding.ivAttachment.setVisibility(View.INVISIBLE);
                     binding.ivCamera.setVisibility(View.INVISIBLE);
@@ -119,6 +120,7 @@ public class ChatActivity extends AppCompatActivity {
                         vibrator.vibrate(100);
                     }
                     startRecord();
+
                 }
                 else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -145,6 +147,8 @@ public class ChatActivity extends AppCompatActivity {
                 binding.etMessage.setVisibility(View.VISIBLE);
 
                 sTime = getHumanTime(System.currentTimeMillis());
+
+                stopRecord();
 
             }
 
@@ -190,11 +194,11 @@ public class ChatActivity extends AppCompatActivity {
             }
         } catch (IllegalStateException e) {
             Toast.makeText(this, "Error uploading voice IllegalStateException", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, "Error uploading voice IllegalStateException" + e.getMessage());
         }
         catch (Exception e) {
             Toast.makeText(this, "Error uploading voice", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, "Error uploading voice" + e.getMessage());
         }
     }
 
@@ -208,25 +212,60 @@ public class ChatActivity extends AppCompatActivity {
             Toast.makeText(ChatActivity.this, "Recording error, please restart the App", Toast.LENGTH_SHORT).show();
             Log.e(TAG, e.getMessage());
         }
+        catch (Exception e) {
+            Toast.makeText(ChatActivity.this, "Recording error, please restart the App", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, e.getMessage());
+        }
 
     }
 
     private String audioPath;
 
     private void setUpMediaRecorder() {
-        String pathName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + UUID.randomUUID().toString() + "audio_record.m4a";
+        //String pathName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + UUID.randomUUID().toString() + "" + "audio_record.m4a";
+        // String pathName = getExternalCacheDir().getAbsolutePath() + "/audiorecordtest.3gp";
+        //String pathName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + UUID.randomUUID().toString() + "/audiorecordtest.3gp";
+        String pathName = "";
+        //File dir = Environment.getExternalStorageDirectory();
+        File dir = Environment.getExternalStorageDirectory().getAbsoluteFile();
+//        try {
+//            //pathName = (File.createTempFile("audiorecordtest", ".3gp", dir)).getAbsolutePath();
+//            pathName = (new File(dir.getAbsolutePath() + "/" + "audiorecordtest.3gp")).getAbsolutePath();
+//        } catch (IOException e) {
+//            Log.e(TAG, "external storage access error");
+//            return;
+//        }
+        pathName = (new File(dir + "/" + "audiorecordtest.3gp")).getAbsolutePath();
+
+        Log.i(TAG, pathName);
         audioPath = pathName;
 
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            mediaRecorder = new MediaRecorder(ChatActivity.this);
+//        }
         mediaRecorder = new MediaRecorder();
 
         try {
+
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             mediaRecorder.setOutputFile(pathName);
+
+
+//            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+//            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+//            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+//            mediaRecorder.setOutputFile(pathName);
         } catch (IllegalStateException e) {
-            Log.e(TAG, e.getMessage());
+            //Log.e(TAG, e.getMessage());
+            Log.e(TAG, "IllegalStateException " + e.getMessage());
+
         }
+        catch (Exception e) {
+            Log.e(TAG, "Exception " + e.getMessage());
+        }
+
 
     }
 
@@ -242,6 +281,7 @@ public class ChatActivity extends AppCompatActivity {
     private void requestPermissions() {
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE,
                 Manifest.permission.RECORD_AUDIO,
         }, REQUEST_CORD_PERMISSION);
     }
@@ -319,6 +359,8 @@ public class ChatActivity extends AppCompatActivity {
 //                binding.fabChat.setImageDrawable(getDrawable(layoutId));
 
                 if (chatServices.isEmptyMessage(binding.etMessage.getText().toString())){
+                    binding.fabChat.setVisibility(View.INVISIBLE);
+                    binding.recordButton.setVisibility(View.VISIBLE);
                     binding.fabChat.setImageDrawable(getDrawable(R.drawable.ic_baseline_keyboard_voice_24));
                 }
                 else {

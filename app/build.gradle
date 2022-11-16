@@ -11,6 +11,8 @@ android {
         applicationId "whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2"
         minSdk 21
         targetSdk 32
+//        minSdk 31
+//        targetSdk 33
         versionCode 1
         versionName "1.0"
 

@@ -3,6 +3,7 @@ package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Managers;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -172,25 +173,25 @@ public class ChatServices {
                 Uri downloadUrl = urlTask.getResult();
                 String voiceUrl = String.valueOf(downloadUrl);
 
-                Chat chat = new Chat(getCurrentTime(), "", "VOICE", user.getUid(), receiverId, audioPath);
+                Chat chat = new Chat(getCurrentTime(), "", "VOICE", user.getUid(), receiverId, voiceUrl);
 
                 reference.child("Chats").push().setValue(chat)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-
+                                Log.i("sendVoice","onSuccess(Void unused)" + voiceUrl);
                             }
                         })
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-
+                                Log.i("sendVoice", "onComplete(@NonNull Task<Void> task)" + voiceUrl);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-
+                                Log.e("sendVoice", "onFailure(@NonNull Exception e)" + voiceUrl + " " + e.getMessage());
                             }
                         });
 
@@ -199,6 +200,8 @@ public class ChatServices {
 
                 DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("ChatList").child(receiverId).child(user.getUid());
                 chatRef2.child("chatId").setValue(user.getUid());
+
+
 
             }
         });
