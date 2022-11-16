@@ -68,13 +68,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
    public class ViewHolder extends RecyclerView.ViewHolder {
 
       private TextView textMessage;
-      private LinearLayout layoutText, layoutImage;
+      private LinearLayout layoutText, layoutImage, layoutVoice;
       private ImageView imageMessage;
       public ViewHolder(@NonNull View itemView) {
          super(itemView);
          textMessage = itemView.findViewById(R.id.tvTextMenssage);
          layoutText = itemView.findViewById(R.id.layoutText);
          layoutImage = itemView.findViewById(R.id.layoutImage);
+         layoutVoice = itemView.findViewById(R.id.layoutAudio);
          imageMessage = itemView.findViewById(R.id.ivImageMessage);
       }
 
@@ -84,12 +85,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             case "TEXT":
                layoutText.setVisibility(View.VISIBLE);
                layoutImage.setVisibility(View.GONE);
+               layoutVoice.setVisibility(View.GONE);
+
                textMessage.setText(chat.getTextMessage());
                break;
             case "IMAGE":
                layoutText.setVisibility(View.GONE);
                layoutImage.setVisibility(View.VISIBLE);
+               layoutVoice.setVisibility(View.GONE);
+
                Glide.with(context).load(chat.getUri()).into(imageMessage);
+               break;
+
+            case "VOICE":
+               layoutText.setVisibility(View.GONE);
+               layoutImage.setVisibility(View.GONE);
+               layoutVoice.setVisibility(View.VISIBLE);
+
+
+
                break;
          }
       }
