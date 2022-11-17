@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Dialogs.DialogViewUser;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.ChatList;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Activities.Chat.ChatActivity;
@@ -62,6 +63,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.Holder
                     .putExtra("userId",chatList.getUserID())
                     .putExtra("userName",chatList.getUserName())
                     .putExtra("userProfile",chatList.getUrlProfile()));
+         }
+      });
+
+      holder.profile.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+            new DialogViewUser(context, chatList);
          }
       });
    }
