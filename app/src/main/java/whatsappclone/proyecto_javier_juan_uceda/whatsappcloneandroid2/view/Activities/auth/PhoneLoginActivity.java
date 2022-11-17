@@ -70,6 +70,7 @@ public class PhoneLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (binding.btnCountry.getText().toString().equals("Next")) {
+
                     progressDialog.setMessage("Please wait");
                     progressDialog.show();
 
@@ -106,6 +107,8 @@ public class PhoneLoginActivity extends AppCompatActivity {
                 mResendToken = forceResendingToken;
 
                 binding.btnCountry.setText("Confirm");
+                binding.etCodeCountry.setVisibility(View.VISIBLE);
+
                 progressDialog.dismiss();
             }
         };

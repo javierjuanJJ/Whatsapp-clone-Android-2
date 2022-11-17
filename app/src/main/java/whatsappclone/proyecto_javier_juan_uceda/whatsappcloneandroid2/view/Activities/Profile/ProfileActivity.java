@@ -128,79 +128,13 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void showBottomSheetDialog() {
-
-        if (bottomSheetDialog == null) {
-            bottomSheetDialog = new BottomSheetDialog(this);
-        }
-
-        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_pick, null);
-        view.findViewById(R.id.layoutGallery).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openGallery();
-                bottomSheetDialog.dismiss();
-            }
-        });
-
-        view.findViewById(R.id.layoutCamera).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Toast.makeText(getApplicationContext(), "Camera", Toast.LENGTH_SHORT).show();
-
-                checkCameraPermissions();
-
-                bottomSheetDialog.dismiss();
-            }
-        });
-        bottomSheetDialog.setContentView(view);
-
-        bottomSheetDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                bottomSheetDialog = null;
-            }
-        });
 
 
-        bottomSheetDialog.show();
-    }
 
-    private void checkCameraPermissions() {
-        if (ContextCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(ProfileActivity.this, new String[]{Manifest.permission.CAMERA}, 222);
-        }
-        else if (ContextCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(ProfileActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 222);
-        }
-        else {
-            openCamera();
-        }
-    }
 
     private Uri imageUri;
 
-    private void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        String timeStmap = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "IMG_" + timeStmap + ".jpg";
 
-        try {
-            File file = File.createTempFile("IMG_" + timeStmap, ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES));
-            imageUri = FileProvider.getUriForFile(ProfileActivity.this, BuildConfig.APPLICATION_ID + ".provider", file);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            intent.putExtra("listPhotoName", imageFileName);
-
-            startActivityForResult(intent, 440);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }
 
     private void showBottomSheetEditNameDialog() {
 
@@ -248,6 +182,80 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         bottomSheetEditNameDialog.show();
+    }
+
+
+
+    private void checkCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(ProfileActivity.this, new String[]{Manifest.permission.CAMERA}, 222);
+        }
+        else if (ContextCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(ProfileActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 222);
+        }
+        else {
+            openCamera();
+        }
+    }
+
+    private void showBottomSheetDialog() {
+
+        if (bottomSheetDialog == null) {
+            bottomSheetDialog = new BottomSheetDialog(this);
+        }
+
+        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_pick, null);
+        view.findViewById(R.id.layoutGallery).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openGallery();
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        view.findViewById(R.id.layoutCamera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(getApplicationContext(), "Camera", Toast.LENGTH_SHORT).show();
+
+                checkCameraPermissions();
+
+                bottomSheetDialog.dismiss();
+            }
+        });
+        bottomSheetDialog.setContentView(view);
+
+        bottomSheetDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                bottomSheetDialog = null;
+            }
+        });
+
+
+        bottomSheetDialog.show();
+    }
+
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        String timeStmap = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStmap + ".jpg";
+
+        try {
+            File file = File.createTempFile("IMG_" + timeStmap, ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES));
+            imageUri = FileProvider.getUriForFile(ProfileActivity.this, BuildConfig.APPLICATION_ID + ".provider", file);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            intent.putExtra("listPhotoName", imageFileName);
+
+            startActivityForResult(intent, 440);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void updateProfile(String newName) {

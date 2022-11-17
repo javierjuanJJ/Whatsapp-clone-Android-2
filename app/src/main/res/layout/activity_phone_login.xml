@@ -92,13 +92,14 @@
                 android:text="Carrie SMS charge may apply" />
 
             <EditText
+                android:id="@+id/etCode"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:id="@+id/etCode"
-                android:maxLength="6"
+                android:hint="Enter code"
                 android:inputType="number"
-                android:hint="Enter code"/>
+                android:maxLength="6"
+                android:visibility="gone" />
 
         </LinearLayout>
 
