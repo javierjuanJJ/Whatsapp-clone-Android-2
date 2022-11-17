@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -18,8 +19,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Interfaces.OnPlayCallBack;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.Chat.Chat;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.tools.AudioServices;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
@@ -27,6 +30,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
    private Context context;
    private static final int MSG_TYPE_LEFT = 0;
    private static final int MSG_TYPE_RIGHT = 1;
+   private ImageButton tmpBtnPlay;
+   private AudioServices audioServices;
+
 
    public void setListChat(ArrayList<Chat> listChatToAdd) {
       this.listChat.clear();
@@ -37,6 +43,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
    public ChatAdapter(ArrayList<Chat> listChat, Context context) {
       this.listChat = listChat;
       this.context = context;
+      audioServices = new AudioServices(context);
    }
 
 
@@ -70,6 +77,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
       private TextView textMessage;
       private LinearLayout layoutText, layoutImage, layoutVoice;
       private ImageView imageMessage;
+      private ImageButton imageButton;
+
       public ViewHolder(@NonNull View itemView) {
          super(itemView);
          textMessage = itemView.findViewById(R.id.tvTextMenssage);
@@ -77,6 +86,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
          layoutImage = itemView.findViewById(R.id.layoutImage);
          layoutVoice = itemView.findViewById(R.id.layoutAudio);
          imageMessage = itemView.findViewById(R.id.ivImageMessage);
+         imageButton = itemView.findViewById(R.id.btnPlayVoice);
       }
 
       void bind(Chat chat){
@@ -102,7 +112,27 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                layoutImage.setVisibility(View.GONE);
                layoutVoice.setVisibility(View.VISIBLE);
 
+               layoutVoice.setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View v) {
 
+                     if (tmpBtnPlay != null) {
+                        tmpBtnPlay.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_baseline_play_circle_24));
+                     }
+
+                     imageButton.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_baseline_pause_circle_24));
+
+                     audioServices.playAudioFromUrl(chat.getUri(), new OnPlayCallBack() {
+                        @Override
+                        public void OnFinished() {
+                           imageButton.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_baseline_play_circle_24));
+                        }
+                     });
+
+                     tmpBtnPlay = imageButton;
+
+                  }
+               });
 
                break;
          }
