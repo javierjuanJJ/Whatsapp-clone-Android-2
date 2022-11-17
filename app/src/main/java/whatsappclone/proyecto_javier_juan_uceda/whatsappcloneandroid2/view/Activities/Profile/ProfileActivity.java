@@ -32,6 +32,7 @@ import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -61,6 +62,7 @@ import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Activ
 
 public class ProfileActivity extends AppCompatActivity {
 
+    public static final int REQUEST_CAMERA_PHOTO = 440;
     private ActivityProfileBinding binding;
     private FirebaseUser firebaseUser;
     private FirebaseFirestore firestore;
@@ -194,7 +196,7 @@ public class ProfileActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(ProfileActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 222);
         }
         else {
-            openCamera();
+            //openCamera();
         }
     }
 
@@ -219,7 +221,7 @@ public class ProfileActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(), "Camera", Toast.LENGTH_SHORT).show();
 
                 checkCameraPermissions();
-
+                openCamera();
                 bottomSheetDialog.dismiss();
             }
         });
@@ -240,15 +242,19 @@ public class ProfileActivity extends AppCompatActivity {
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         String timeStmap = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "IMG_" + timeStmap + ".jpg";
+        String imageFileName = "IMG_" + timeStmap;
 
         try {
-            File file = File.createTempFile("IMG_" + timeStmap, ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES));
+            File file = File.createTempFile(imageFileName, ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES));
             imageUri = FileProvider.getUriForFile(ProfileActivity.this, BuildConfig.APPLICATION_ID + ".provider", file);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            intent.putExtra("listPhotoName", imageFileName);
 
-            startActivityForResult(intent, 440);
+            //uri = Uri.fromFile(file);
+
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            intent.putExtra("listPhotoName", file);
+            Log.i("listPhotoName", file.getAbsolutePath());
+
+            startActivityForResult(intent, REQUEST_CAMERA_PHOTO);
 
 
         } catch (IOException e) {
@@ -289,8 +295,12 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("listPhotoName", String.valueOf(requestCode));
+        Log.i("listPhotoName", String.valueOf(resultCode));
+        //Log.i("listPhotoName", String.valueOf(data.getData()));
         if (requestCode == IMAGE_REQUEST_GALLERY && resultCode == RESULT_OK && data != null && data.getData() != null) {
             uri = data.getData();
+
             uploadToFirebase();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
@@ -300,14 +310,21 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
 
-        if (requestCode == 440 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
+//        else if (requestCode == REQUEST_CAMERA_PHOTO && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        else if (requestCode == REQUEST_CAMERA_PHOTO && resultCode == RESULT_OK) {
+
+            //imageUri = data.getData();
+            //uri = data.getData();
+            uri = imageUri;
+            Log.i("listPhotoName", String.valueOf(uri));
             uploadToFirebase();
         }
     }
 
     private void uploadToFirebase() {
+        Log.i("listPhotoName", String.valueOf(uri));
         if (uri != null) {
+            Log.i("listPhotoName", String.valueOf(uri));
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("imageProfile/" + System.currentTimeMillis() + " " + getFileExtension(uri));
@@ -378,7 +395,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                         binding.tvUsername.setText(userName);
                         binding.tvInfoPhone.setText(userPhone);
-                        Glide.with(getApplicationContext()).load(imageProfile).into(binding.imageProfile);
+                        Glide.with(getApplicationContext()).load(imageProfile).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(binding.imageProfile);
                     }
                 })
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

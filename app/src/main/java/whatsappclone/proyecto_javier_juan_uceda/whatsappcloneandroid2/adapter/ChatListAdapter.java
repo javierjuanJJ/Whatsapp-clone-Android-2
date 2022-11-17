@@ -45,33 +45,36 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.Holder
    @Override
    public void onBindViewHolder(@NonNull Holder holder, int position) {
       ChatList chatList = chatLists.get(position);
-      holder.tvName.setText(chatList.getUserName());
-      holder.tvDesc.setText(chatList.getDescription());
-      holder.tvDate.setText(chatList.getDate());
 
-      if (chatList.getUrlProfile().equals("")) {
-         holder.profile.setImageResource(R.drawable.placeholder);
-      }
-      else {
-         Glide.with(context).load(chatList.getUrlProfile()).into(holder.profile);
-      }
+      if (holder.tvName != null && holder.tvDesc != null && holder.tvDate != null) {
+         holder.tvName.setText(chatList.getUserName());
+         holder.tvDesc.setText(chatList.getDescription());
+         holder.tvDate.setText(chatList.getDate());
 
-      holder.itemView.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
-            context.startActivity(new Intent(context, ChatActivity.class)
-                    .putExtra("userId",chatList.getUserID())
-                    .putExtra("userName",chatList.getUserName())
-                    .putExtra("userProfile",chatList.getUrlProfile()));
+         if (chatList.getUrlProfile().equals("")) {
+            holder.profile.setImageResource(R.drawable.placeholder);
          }
-      });
-
-      holder.profile.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            new DialogViewUser(context, chatList);
+         else {
+            Glide.with(context).load(chatList.getUrlProfile()).into(holder.profile);
          }
-      });
+
+         holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               context.startActivity(new Intent(context, ChatActivity.class)
+                       .putExtra("userId",chatList.getUserID())
+                       .putExtra("userName",chatList.getUserName())
+                       .putExtra("userProfile",chatList.getUrlProfile()));
+            }
+         });
+
+         holder.profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               new DialogViewUser(context, chatList);
+            }
+         });
+      }
    }
 
    /**

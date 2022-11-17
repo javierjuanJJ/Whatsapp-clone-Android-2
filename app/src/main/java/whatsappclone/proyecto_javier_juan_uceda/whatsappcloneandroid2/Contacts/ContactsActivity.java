@@ -67,9 +67,9 @@ public class ContactsActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
 
         if (firebaseUser != null) {
-            getContactsFromPhone();
+            //getContactsFromPhone();
 
-            //getContactsList();
+            getContactsList();
         }
     }
 
@@ -190,21 +190,8 @@ public class ContactsActivity extends AppCompatActivity {
 
                         }
 
-                        /*for (Users user :listUsers) {
-                            if (mobileArray.contains(user.getUserPhone())) {
-
-                            }
-                            else {
-
-                            }
-                        }*/
-
                         contactsListAdapter = new ContactsListAdapter(listUsers, ContactsActivity.this);
                         binding.recyclerView.setAdapter(contactsListAdapter);
-
-
-
-
 
                     }
 

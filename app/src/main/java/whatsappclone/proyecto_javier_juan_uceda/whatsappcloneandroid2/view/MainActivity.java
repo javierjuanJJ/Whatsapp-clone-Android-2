@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private static final int[] DRAWABLES = new int[]{R.drawable.call, R.drawable.status, R.drawable.chat};
+    private static final int[] DRAWABLES = new int[]{R.drawable.call, R.drawable.call, R.drawable.status, R.drawable.chat};
 
     private void changeFabIcon(final int icon){
         binding.fabAction.hide();
@@ -155,19 +155,34 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
+
                 binding.fabAction.setImageDrawable(getDrawable(DRAWABLES[icon]));
+
+
                 switch (icon){
                     case 0: binding.fabAction.hide(); break;
                     case 1:
 
-                        binding.fabAction.show(); break;
+                        binding.fabAction.show();
+                        binding.fabAction.setOnClickListener(v -> {
+
+                        });
+
+                        break;
                     case 2:
                         binding.btnAddStatus.setVisibility(View.VISIBLE);
-                        binding.fabAction.show(); break;
+                        binding.fabAction.show();
+                        binding.fabAction.setOnClickListener(v -> {
+
+                        });
+                        break;
                     case 3:
                         binding.fabAction.show();
-                        //startActivity(new Intent(MainActivity.this, ContactsActivity.class));
-                        //binding.fabAction.setImageDrawable(getDrawable(R.drawable.ic_baseline_call_24));
+                        binding.fabAction.setOnClickListener(v -> {
+                            startActivity(new Intent(MainActivity.this, ContactsActivity.class));
+                        });
+
                         break;
                 }
                 //binding.fabAction.show();
