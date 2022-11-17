@@ -1,14 +1,17 @@
 package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Activities.Profile;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,7 +25,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.Glide;
@@ -39,8 +45,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.BuildConfig;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Common.Common;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Display.ViewImageActivity;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
@@ -134,7 +146,10 @@ public class ProfileActivity extends AppCompatActivity {
         view.findViewById(R.id.layoutCamera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Camera", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Camera", Toast.LENGTH_SHORT).show();
+
+                checkCameraPermissions();
+
                 bottomSheetDialog.dismiss();
             }
         });
@@ -150,6 +165,41 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         bottomSheetDialog.show();
+    }
+
+    private void checkCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(ProfileActivity.this, new String[]{Manifest.permission.CAMERA}, 222);
+        }
+        else if (ContextCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(ProfileActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 222);
+        }
+        else {
+            openCamera();
+        }
+    }
+
+    private Uri imageUri;
+
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        String timeStmap = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStmap + ".jpg";
+
+        try {
+            File file = File.createTempFile("IMG_" + timeStmap, ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES));
+            imageUri = FileProvider.getUriForFile(ProfileActivity.this, BuildConfig.APPLICATION_ID + ".provider", file);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            intent.putExtra("listPhotoName", imageFileName);
+
+            startActivityForResult(intent, 440);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void showBottomSheetEditNameDialog() {
@@ -240,6 +290,11 @@ public class ProfileActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+        if (requestCode == 440 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            uploadToFirebase();
         }
     }
 
