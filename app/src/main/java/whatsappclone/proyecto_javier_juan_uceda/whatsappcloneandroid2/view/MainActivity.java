@@ -12,14 +12,17 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Contacts.ContactsActivity;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu.CallsFragment;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu.CameraFragment;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu.ChatsFragment;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu.StatusFragment;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
@@ -37,6 +40,15 @@ public class MainActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setUpWithViewPager(binding.viewPager);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
+
+        View tab1 = LayoutInflater.from(this).inflate(R.layout.custom_camera_tab, null);
+        try {
+            binding.tabLayout.getTabAt(0).setCustomView(tab1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        binding.viewPager.setCurrentItem(1);
 
         setSupportActionBar(binding.toolbar);
         binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -93,11 +105,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpWithViewPager(ViewPager viewPager){
         MyAdapter myAdapter = new MyAdapter(getSupportFragmentManager());
+        myAdapter.addFragment(new CameraFragment(), "");
         myAdapter.addFragment(new CallsFragment(), "Calls");
         myAdapter.addFragment(new StatusFragment(), "Status");
         myAdapter.addFragment(new ChatsFragment(), "Chats");
 
         viewPager.setAdapter(myAdapter);
+
+
     }
 
     public static class MyAdapter extends FragmentPagerAdapter {
@@ -142,9 +157,14 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 binding.fabAction.setImageDrawable(getDrawable(DRAWABLES[icon]));
                 switch (icon){
-                    case 0: break;
-                    case 1: break;
-                    case 2: startActivity(new Intent(MainActivity.this, ContactsActivity.class));break;
+                    case 0: binding.fabAction.hide(); break;
+                    case 1: binding.fabAction.show(); break;
+                    case 2: binding.fabAction.show(); break;
+                    case 3:
+                        binding.fabAction.show();
+                        //startActivity(new Intent(MainActivity.this, ContactsActivity.class));
+                        //binding.fabAction.setImageDrawable(getDrawable(R.drawable.ic_baseline_call_24));
+                        break;
                 }
                 binding.fabAction.show();
             }
