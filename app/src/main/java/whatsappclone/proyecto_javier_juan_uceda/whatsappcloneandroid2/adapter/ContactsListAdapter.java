@@ -42,7 +42,7 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Users user = this.users.get(position);
         holder.tvUsername.setText(user.getUserName());
-        holder.tvDescription.setText(user.getBio());
+        holder.tvDescription.setText(user.getUserPhone());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
