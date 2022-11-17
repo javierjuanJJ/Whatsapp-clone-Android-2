@@ -151,22 +151,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void changeFabIcon(final int icon){
         binding.fabAction.hide();
-
+        binding.fabAction.setVisibility(View.GONE);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 binding.fabAction.setImageDrawable(getDrawable(DRAWABLES[icon]));
                 switch (icon){
                     case 0: binding.fabAction.hide(); break;
-                    case 1: binding.fabAction.show(); break;
-                    case 2: binding.fabAction.show(); break;
+                    case 1:
+
+                        binding.fabAction.show(); break;
+                    case 2:
+                        binding.btnAddStatus.setVisibility(View.VISIBLE);
+                        binding.fabAction.show(); break;
                     case 3:
                         binding.fabAction.show();
                         //startActivity(new Intent(MainActivity.this, ContactsActivity.class));
                         //binding.fabAction.setImageDrawable(getDrawable(R.drawable.ic_baseline_call_24));
                         break;
                 }
-                binding.fabAction.show();
+                //binding.fabAction.show();
             }
         },400);
 
