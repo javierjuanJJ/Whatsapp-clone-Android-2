@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".view.Activities.Status.StatusActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <ImageButton
+            android:id="@+id/btnArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:foreground="?selectableItemBackground"
+            android:src="@drawable/ic_baseline_arrow_back_24"
+            app:tint="@color/white"
+
+            android:background="@android:color/transparent"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivPlaceholder"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/placeholder"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            android:backgroundTint="@color/white"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/btnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_edit_24"
+            android:foreground="?selectableItemBackground"
+            app:tint="@color/white"
+            android:padding="10dp"
+            android:background="@android:color/transparent"/>
+
+        <ImageButton
+            android:id="@+id/btnCrop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_crop_24"
+            android:foreground="?selectableItemBackground"
+            android:padding="10dp"
+            app:tint="@color/white"
+            android:background="@android:color/transparent"/>
+
+        <ImageButton
+            android:id="@+id/btnEmoticon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_insert_emoticon_24"
+            android:foreground="?selectableItemBackground"
+            app:tint="@color/white"
+            android:padding="10dp"
+            android:background="@android:color/transparent"/>
+
+        <ImageButton
+            android:id="@+id/btnTextField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_text_fields_24"
+            android:foreground="?selectableItemBackground"
+            app:tint="@color/white"
+            android:padding="10dp"
+            android:background="@android:color/transparent"/>
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivProfile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/placeholder" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ivPhoto"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_baseline_browse_gallery_24"
+            app:tint="@color/white"
+            android:padding="10dp"
+            android:background="@android:color/transparent" />
+
+        <EditText
+            android:id="@+id/etCaption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="@android:color/transparent"
+            android:textColor="@color/white"
+            android:textColorHint="#B6B6B6"
+            android:hint="Add a caption... "/>
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#B6B6B6"
+        android:src="@drawable/ic_baseline_send_24"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="15dp"
+        android:elevation="5dp"
+        android:tint="@color/white"
+        app:elevation="5dp"/>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
