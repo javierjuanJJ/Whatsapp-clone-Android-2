@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
     private void changeFabIcon(final int icon){
         binding.fabAction.hide();
         binding.fabAction.setVisibility(View.GONE);
+        binding.btnAddStatus.setVisibility(View.GONE);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -210,14 +211,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 switch (index){
-                    case 1: startActivity(new Intent(MainActivity.this, ContactsActivity.class));break;
+                    case 1:
+                        Toast.makeText(MainActivity.this, "Call", Toast.LENGTH_SHORT).show();
+                        break;
                     case 2:
 
-                        Toast.makeText(MainActivity.this, "Camera", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Status", Toast.LENGTH_SHORT).show();
                         break;
 
                     case 3:
-                        Toast.makeText(MainActivity.this, "Call", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, ContactsActivity.class));
+
                         break;
                     default: break;
                 }

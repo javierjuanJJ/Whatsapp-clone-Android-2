@@ -67,9 +67,9 @@ public class ContactsActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
 
         if (firebaseUser != null) {
-            //getContactsFromPhone();
+            getContactsFromPhone();
 
-            getContactsList();
+            //getContactsList();
         }
     }
 
