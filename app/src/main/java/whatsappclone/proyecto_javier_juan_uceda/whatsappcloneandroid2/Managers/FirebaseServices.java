@@ -3,9 +3,7 @@ package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Managers;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -15,19 +13,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
-import java.util.HashMap;
-
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Interfaces.OnImageSetCallback;
-import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Interfaces.OnUploadImageCallback;
-import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.Chat.Chat;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Interfaces.OnStatusUploadCallback;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.Status;
 
 public class FirebaseServices {
 
@@ -74,6 +67,20 @@ public class FirebaseServices {
         }
     }
 
-
+    public void uploadStatus(Status status, OnStatusUploadCallback onStatusUploadCallback) {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("Status Daily").document(status.getId()).set(status)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        onStatusUploadCallback.onUploadSuccess(status.getImageStatus());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        onStatusUploadCallback.onUploadFailure(e);
+                    }
+                });
+    }
 
 }

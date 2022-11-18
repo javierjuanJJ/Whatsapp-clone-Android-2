@@ -44,6 +44,10 @@ public class ChatServices {
         this.receiverId = receiverId;
     }
 
+    public ChatServices(Context context) {
+        this.context = context;
+    }
+
     public void readChatServices(onReadChatCallback callback){
         if (callback != null) {
             try {

@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
             //imageUri = data.getData();
             //uri = data.getData();
             Log.i("listPhotoName", String.valueOf(imageUri));
-            startActivity(new Intent(MainActivity.this, StatusActivity.class));
+            startActivity(new Intent(MainActivity.this, StatusActivity.class).putExtra("image", imageUri));
             //uploadToFirebase();
         }
     }
