@@ -23,6 +23,7 @@ import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Managers.F
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.databinding.ActivityStatusBinding;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.model.Status;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.MainActivity;
 
 public class StatusActivity extends AppCompatActivity {
 
@@ -96,9 +97,11 @@ public class StatusActivity extends AppCompatActivity {
     }
 
     private void setUI() {
-        uri = (Uri) getIntent().getSerializableExtra("image");
+        if (MainActivity.imageCamera != null) {
+            uri = MainActivity.imageCamera;
 
-        Glide.with(StatusActivity.this).load(uri).into(binding.ivProfile);
+            Glide.with(StatusActivity.this).load(uri).into(binding.ivProfile);
+        }
 
     }
 }

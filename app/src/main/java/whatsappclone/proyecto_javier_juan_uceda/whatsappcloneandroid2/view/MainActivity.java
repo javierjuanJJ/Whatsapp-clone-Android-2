@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private Uri imageUri;
+    public static Uri imageCamera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (index){
                     case 1: startActivity(new Intent(MainActivity.this, ContactsActivity.class));break;
                     case 2:
-                        checkCameraPermissions();
+
                         Toast.makeText(MainActivity.this, "Camera", Toast.LENGTH_SHORT).show();
                         break;
 
@@ -226,6 +227,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Add status... ", Toast.LENGTH_SHORT).show();
+                checkCameraPermissions();
+                openCamera();
             }
         });
     }
@@ -238,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 222);
         }
         else {
-            openCamera();
+            //openCamera();
         }
     }
 
@@ -253,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
             //imageUri = data.getData();
             //uri = data.getData();
             Log.i("listPhotoName", String.valueOf(imageUri));
+            imageCamera = imageUri;
             startActivity(new Intent(MainActivity.this, StatusActivity.class).putExtra("image", imageUri));
             //uploadToFirebase();
         }

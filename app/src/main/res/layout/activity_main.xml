@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -55,20 +56,19 @@
 
 
         <ImageButton
+            android:id="@+id/btnAddStatus"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:visibility="gone"
-            android:id="@+id/btnAddStatus"
-            android:background="@drawable/circle_bg_white"
-            android:src="@drawable/ic_baseline_edit_24"
-            android:layout_margin="15dp"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="80dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="25dp"
+            android:background="@drawable/circle_bg_white"
             android:elevation="2dp"
+            android:src="@drawable/ic_baseline_edit_24"
+            android:visibility="gone"
             app:tint="@color/colorPrimary" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
