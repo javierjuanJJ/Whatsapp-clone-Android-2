@@ -1,5 +1,6 @@
 package whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.Menu;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.R;
 import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.databinding.FragmentStatusBinding;
+import whatsappclone.proyecto_javier_juan_uceda.whatsappcloneandroid2.view.Activities.Status.DisplayStatusActivity;
 
 public class StatusFragment extends Fragment {
 
@@ -40,6 +42,13 @@ public class StatusFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_status, container, false);
 
         getProfile();
+
+        binding.layoutStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().startActivity(new Intent(getContext(), DisplayStatusActivity.class));
+            }
+        });
 
 
         return binding.getRoot();
